@@ -81,8 +81,8 @@ Thought: {agent_scratchpad}"""
                         func=lambda q: self.retrieve(q, overrides), 
                         description=self.CognitiveSearchToolDescription,
                         callbacks=cb_manager)
-        employee_tool = EmployeeInfoTool("Employee1", callbacks=cb_manager)
-        tools = [acs_tool, employee_tool]
+        # employee_tool = EmployeeInfoTool("Employee1", callbacks=cb_manager)
+        tools = [acs_tool]
 
         prompt = ZeroShotAgent.create_prompt(
             tools=tools,
@@ -99,21 +99,21 @@ Thought: {agent_scratchpad}"""
         result = agent_exec.run(q)
                 
         # Remove references to tool names that might be confused with a citation
-        result = result.replace("[CognitiveSearch]", "").replace("[Employee]", "")
+        result = result.replace("[CognitiveSearch]", "") #.replace("[Employee]", "")
 
         return {"data_points": self.results or [], "answer": result, "thoughts": cb_handler.get_and_reset_log()}
 
-class EmployeeInfoTool(CsvLookupTool):
-    employee_name: str = ""
+# class EmployeeInfoTool(CsvLookupTool):
+#     employee_name: str = ""
 
-    def __init__(self, employee_name: str, callbacks: Callbacks = None):
-        super().__init__(filename="data/employeeinfo.csv", 
-                         key_field="name", 
-                         name="Employee", 
-                         description="useful for answering questions about the employee, their benefits and other personal information",
-                         callbacks=callbacks)
-        self.func = self.employee_info
-        self.employee_name = employee_name
+#     def __init__(self, employee_name: str, callbacks: Callbacks = None):
+#         super().__init__(filename="data/employeeinfo.csv", 
+#                          key_field="name", 
+#                          name="Employee", 
+#                          description="useful for answering questions about the employee, their benefits and other personal information",
+#                          callbacks=callbacks)
+#         self.func = self.employee_info
+#         self.employee_name = employee_name
 
-    def employee_info(self, unused: str) -> str:
-        return self.lookup(self.employee_name)
+#     def employee_info(self, unused: str) -> str:
+#         return self.lookup(self.employee_name)

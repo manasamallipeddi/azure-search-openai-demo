@@ -238,7 +238,7 @@ def create_search_index():
         index = SearchIndex(
             name=args.index,
             fields=[
-                SimpleField(name="id", type="Edm.String", key=True),
+                SimpleField(name="metadata_storage_path", type="Edm.String", key=True),
                 SearchableField(name="content", type="Edm.String", analyzer_name="en.microsoft"),
                 SimpleField(name="category", type="Edm.String", filterable=True, facetable=True),
                 SimpleField(name="sourcepage", type="Edm.String", filterable=True, facetable=True),
